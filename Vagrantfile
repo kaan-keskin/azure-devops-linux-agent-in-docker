@@ -12,21 +12,19 @@ Vagrant.configure("2") do |config|
     end
     dev1.vm.network "private_network", ip: "192.168.33.99"
     dev1.vm.synced_folder "./scripts", "/vagrant"
-    dev1.vm.provision "shell", inline: <<-SHELL
-      cp /etc/ssh/sshd_config /etc/ssh/sshd_config.bkp
-      sed 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config > /tmp/sshd_config
-      sed 's/PasswordAuthentication no/PasswordAuthentication yes/g' /tmp/sshd_config > /tmp/sshd_config2
-      mv -f /tmp/sshd_config2 /etc/ssh/sshd_config
-      systemctl restart sshd
-    SHELL
+    dev1.vm.provision "shell", inline: "bash /vagrant/inits/sshd-conf.sh", privileged: true
     dev1.vm.provision :docker
-    dev1.vm.provision "shell", inline: <<-SHELL  
+    dev1.vm.provision "shell", inline: <<-SHELL
+      # Copy Docker daemon.json configuration inside the VM:
       #cp -f /vagrant/inits/daemon.json /etc/docker/daemon.json
+      # Copy content of the shared /vagrant folder to /azp folder:
       mkdir -p /azp
       cp -Rf /vagrant/* /azp
       chown -Rf vagrant:vagrant /azp
     SHELL
+    # For Manual Usage:
     dev1.vm.provision :docker_compose
+    # For Automated Usage:
     #dev1.vm.provision :docker_compose, rebuild: false, run: "always", 
     #  yml: [
     #    "/azp/docker-compose.testagent.yml",
