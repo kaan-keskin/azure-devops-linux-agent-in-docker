@@ -4,10 +4,7 @@ services:
   
   dockertestagent1:
     hostname: dockertestagent1
-    build: 
-      context: ./inits
-      dockerfile: Dockerfile.testagent
-    image: azure-devops-linux-testagent:latest
+    image: keskinkaan/azuredevops-linux-test-agent-auth-negotiate:2.153.1
     container_name: dockertestagent1
     restart: unless-stopped
     environment:

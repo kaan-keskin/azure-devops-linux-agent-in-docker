@@ -1,3 +1,11 @@
+# 
+# Azure DevOps Linux Test Agent
+# Author: Kaan Keskin
+#
+# Microsoft Azure DevOps Linux Agent Documentation: Run a self-hosted agent in Docker
+# https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/docker?view=azure-devops
+#
+
 FROM ubuntu:18.04
 
 USER root
@@ -8,7 +16,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 # Install Azure DevOps Required Dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update 
+RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     curl \
     jq \
@@ -51,7 +60,7 @@ RUN apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y
 
 # Azure DevOps Agent Starting
 WORKDIR /azp/agent
-COPY ./start.sh .
-RUN chmod +x start.sh
+COPY ./start.negotiate.sh .
+RUN chmod +x start.negotiate.sh
 
-ENTRYPOINT [ "/azp/agent/start.sh" ]
+ENTRYPOINT [ "/azp/agent/start.negotiate.sh" ]
