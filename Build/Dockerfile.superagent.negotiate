@@ -26,7 +26,8 @@ RUN apt-get update \
         unzip \
         tree \
         vim \
-        git
+        git \
+        expect
 
 # GCC and CPP Installations
 RUN apt-get install -y --no-install-recommends \
@@ -75,17 +76,17 @@ RUN export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 RUN export PATH=$PATH:$JAVA_HOME/bin
 
-# Maven 3.8.3 Installation
+# Maven 3.8.4 Installation
 RUN apt-get install -y --no-install-recommends maven
 WORKDIR /azp/maven
-RUN wget https://ftp.itu.edu.tr/Mirror/Apache/maven/maven-3/3.8.3/binaries/apache-maven-3.8.3-bin.tar.gz
-RUN tar -xvzf apache-maven-3.8.3-bin.tar.gz \
-  && mv apache-maven-3.8.3 maven \
+RUN wget https://dlcdn.apache.org/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.tar.gz
+RUN tar -xvzf apache-maven-3.8.4-bin.tar.gz \
+  && mv apache-maven-3.8.4 maven \
   && mv /usr/share/maven /usr/share/maven-old \ 
   && mv maven /usr/share/
 RUN export M2_HOME=/usr/share/maven
 ENV M2_HOME=/usr/share/maven
-RUN rm -rf /azp/maven/apache-maven-3.8.3-bin.tar.gz
+RUN rm -rf /azp/maven/apache-maven-3.8.4-bin.tar.gz
 
 # SonarScanner 4.6.2.2472 Installation
 WORKDIR /azp/sonarscanner
@@ -139,6 +140,7 @@ ENV AZP_WORK=_work
 # Azure DevOps Agent Installation
 ARG TARGETARCH=amd64
 ARG AGENT_VERSION=2.153.1
+#ARG AGENT_VERSION=2.170.1
 WORKDIR /azp/agent
 RUN if [ "$TARGETARCH" = "amd64" ]; then \
       AZP_AGENTPACKAGE_URL=https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz; \
@@ -156,5 +158,16 @@ RUN apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y
 WORKDIR /azp/agent
 COPY ./start.negotiate.sh .
 RUN chmod +x start.negotiate.sh
+
+# Custom Ubuntu Repository Modification
+COPY ./ubuntu-repository/source.list /etc/apt/source.list
+RUN apt-get clean
+# apt-get update and apt-get upgrade commands must be used in container!
+
+# Custom Docker Repository Modification
+COPY ./docker-registry/daemon.json /etc/docker/daemon.json
+
+# Custom Python Pip Repository Modification
+COPY ./pip-repository/pip.conf /root/.pip/pip.conf
 
 ENTRYPOINT [ "/azp/agent/start.negotiate.sh" ]
