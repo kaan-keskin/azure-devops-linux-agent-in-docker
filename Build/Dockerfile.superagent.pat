@@ -144,8 +144,7 @@ RUN curl -LsS https://aka.ms/InstallAzureCLIDeb | bash \
 ENV AGENT_ALLOW_RUNASROOT=1
 ENV AZP_URL=http://domain.company.com.tr:8080/tfs/collection_name/
 ENV AZP_POOL=Default
-ENV AZP_USERNAME=username
-ENV AZP_PASSWORD=password
+ENV AZP_TOKEN=token
 ENV AZP_WORK=_work
 
 # Azure DevOps Agent Installation
@@ -167,8 +166,8 @@ RUN apt-get autoremove -y && apt-get autoclean -y && apt-get clean -y
 
 # Azure DevOps Agent Starting
 WORKDIR /azp/agent
-COPY ./start.negotiate.sh .
-RUN chmod +x start.negotiate.sh
+COPY ./start.pat.sh .
+RUN chmod +x start.pat.sh
 
 # Custom Ubuntu Repository Modification
 COPY ./ubuntu-repository/source.list /etc/apt/source.list
@@ -181,4 +180,4 @@ COPY ./docker-registry/daemon.json /etc/docker/daemon.json
 # Custom Python Pip Repository Modification
 COPY ./pip-repository/pip.conf /root/.pip/pip.conf
 
-ENTRYPOINT [ "/azp/agent/start.negotiate.sh" ]
+ENTRYPOINT [ "/azp/agent/start.pat.sh" ]

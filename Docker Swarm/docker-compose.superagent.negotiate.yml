@@ -4,7 +4,7 @@ services:
   
   dockersuperagent1:
     hostname: dockersuperagent1
-    image: keskinkaan/azuredevops-linux-agent-auth-negotiate:jdk17-mvn3.8-nodejs16-py3-go1.17-dockercli-buildah-sonarscanner4.6-azp2.153.1
+    image: scopeinfra/azuredevops-linux-agent-auth-negotiate:jdk17-jdk11-jdk8-mvn3.8-nodejs16-py3-go1.17-dockercli-buildah-sonarscanner4.6-azp2.170.1
     container_name: dockersuperagent1
     restart: unless-stopped
     volumes:

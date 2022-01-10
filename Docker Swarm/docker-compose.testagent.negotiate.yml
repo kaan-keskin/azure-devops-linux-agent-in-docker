@@ -4,7 +4,7 @@ services:
   
   dockertestagent1:
     hostname: dockertestagent1
-    image: keskinkaan/azuredevops-linux-test-agent-auth-negotiate:2.153.1
+    image: scopeinfra/azuredevops-linux-test-agent-auth-negotiate:2.153.1
     container_name: dockertestagent1
     restart: unless-stopped
     environment:
