@@ -5,6 +5,8 @@
 ######  Custom ignore files BEGINNING  #####
 ############################################
 
+Build/aselsan
+
 .classpath
 **/full-stack
 

@@ -1,5 +1,0 @@
-{
-    "debug": true,
-    "registry-mirrors": ["http://ftp.aselsan.com.tr:8082"],
-    "insecure-registries": ["ftp.aselsan.com.tr:8082"]
-}

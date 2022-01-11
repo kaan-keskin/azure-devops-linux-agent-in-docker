@@ -169,15 +169,4 @@ WORKDIR /azp/agent
 COPY ./start.pat.sh .
 RUN chmod +x start.pat.sh
 
-# Custom Ubuntu Repository Modification
-COPY ./ubuntu-repository/source.list /etc/apt/source.list
-RUN apt-get clean
-# apt-get update and apt-get upgrade commands must be used in container!
-
-# Custom Docker Repository Modification
-COPY ./docker-registry/daemon.json /etc/docker/daemon.json
-
-# Custom Python Pip Repository Modification
-COPY ./pip-repository/pip.conf /root/.pip/pip.conf
-
 ENTRYPOINT [ "/azp/agent/start.pat.sh" ]
