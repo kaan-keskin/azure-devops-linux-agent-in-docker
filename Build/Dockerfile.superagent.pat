@@ -83,8 +83,8 @@ RUN apt-get install -y --no-install-recommends openjdk-8-jdk
 
 # Default JAVA_HOME Environment Variable Set
 #RUN export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 #RUN export PATH=$PATH:$JAVA_HOME/bin
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk
 
 # Maven 3.8.4 Installation
 ARG MAVENVERSION=3.8.4
